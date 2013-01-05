@@ -3,7 +3,6 @@
 <head>
   <title>Telegraph Roulette</title>
   <style>
-
     .rockerButton {
       border: 1px solid black;
       height: 200px;
@@ -19,17 +18,16 @@
 
   <button class="rockerButton"></button>
 
-
   <script src="/socket.io/socket.io.js"></script>
   <script>
 
     var isConnected = false
     var messageStartTime = null
 
-    var socket = io.connect('http://localhost')
+    var socket = io.connect("http://localhost")
 
-    socket.on('message', function (data) {
-      console.log(data)
+    socket.on("message", function (data) {
+      console.log("Received", data)
     })
 
     socket.on("connect", function () {
