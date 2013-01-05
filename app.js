@@ -14,6 +14,30 @@ app.get('/', function (req, res) {
 })
 
 io.sockets.on('connection', function (socket) {
+
+  reloadUser(socket)
+
+  socket.on('disconnect', function() {
+    console.log(socket + ' has disconnected.')
+    socket.get('partner', function(err, partner) {
+      if (err) {
+        console.log('ERROR!!!!', err)
+      }
+      else {
+        console.log("ABOUT TO ABANDON")
+      }
+      partner.emit('abandoned')
+    })
+  })
+
+  socket.on('abandoned', function() {
+    socket.set('partner', undefined)
+    console.log('socket has been abandoned. lets reload the user')
+    reloadUser(socket)
+  })
+})
+
+function reloadUser(socket) {
   console.log('socket connected')
   if (!waitingUser) {
     socket.emit('waiting')
@@ -26,7 +50,7 @@ io.sockets.on('connection', function (socket) {
     connectUsers(waitingUser, socket)
     waitingUser = undefined
   }
-})
+}
 
 function connectUsers(user1, user2) {
   user1.emit('matched')
