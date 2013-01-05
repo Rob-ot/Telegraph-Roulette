@@ -72,19 +72,19 @@ function handleQueueItem (message, cb) {
     return
   }
 
-  //messageDisplay.classList.add("messaging")
-  var beepElement = document.createElement('div')
-  beepElement.classList.add('beep')
-  beepElement.style.width = (message.duration / 10) + 'px';
-  //beepElement.style.marginLeft = (message.duration / -10) + 'px';
-  messageContainer.appendChild(beepElement);
+  messageDisplay.classList.add("messaging")
+  // var beepElement = document.createElement('div')
+  // beepElement.classList.add('beep')
+  // beepElement.style.width = (message.duration / 10) + 'px';
+  // beepElement.style.marginLeft = (message.duration / -10) + 'px';
+  // messageContainer.appendChild(beepElement);
   setTimeout(function() {
     beepElement.classList.add('active')
   },0);
-  
+
 
   setTimeout(function () {
-    //messageDisplay.classList.remove("messaging")
+    messageDisplay.classList.remove("messaging")
     cb()
   }, message.duration)
 
