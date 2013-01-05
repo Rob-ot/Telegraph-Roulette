@@ -1,4 +1,3 @@
-var isConnected = false
 var messageStartTime = null
 var messageQueue = async.queue(handleQueueItem, 1)
 
@@ -8,14 +7,14 @@ var messageDisplay = document.querySelector(".messageDisplay")
 var socket = io.connect("")
 
 function setWaiting() {
-  document.getElementById('status').innerHTML = 'waiting'
+  document.getElementById('status').innerHTML = 'Waiting for a partner...'
 }
 
 socket.on('waiting',setWaiting)
 socket.on('abandoned',setWaiting)
 
 socket.on('matched', function() {
-  document.getElementById('status').innerHTML = 'matched'
+  document.getElementById('status').innerHTML = 'Matched to a random user'
 })
 
 socket.on("message", function (message) {
@@ -26,7 +25,6 @@ socket.on("message", function (message) {
 
 socket.on("connect", function () {
   console.log("Socket Connected!")
-  isConnected = true
 })
 
 
