@@ -3,12 +3,17 @@ var messageStartTime = null
 var messageQueue = async.queue(handleQueueItem, 1)
 
 var rockerButton = document.querySelector("#telegraph")
+var setNameButton = document.querySelector("#set-name")
 var messageDisplay = document.querySelector(".messageDisplay")
 
 var socket = io.connect("")
 
 function setWaiting() {
   document.getElementById('status').innerHTML = 'waiting'
+}
+
+function setFromName(name) {
+  document.getElementById('from-name').innerHTML = name
 }
 
 socket.on('waiting',setWaiting)
@@ -22,6 +27,10 @@ socket.on("message", function (message) {
   console.log("Received", message)
   messageQueue.push(message)
   messageQueue.push({ blank: true })
+})
+
+socket.on("fromName", function(name) {
+  setFromName(name)
 })
 
 socket.on("connect", function () {
@@ -48,6 +57,11 @@ function endMessage () {
   window.removeEventListener("touchend", endMessage, false)
 }
 
+function setName () {
+  var name = document.getElementById('name').value
+  socket.emit('setName', name)
+}
+
 
 function handleQueueItem (message, cb) {
   // blank messages are just for a delay
@@ -69,3 +83,5 @@ function handleQueueItem (message, cb) {
 
 rockerButton.addEventListener("mousedown", startMessage, false)
 rockerButton.addEventListener("touchstart", startMessage, false)
+setNameButton.addEventListener("click", setName, false)
+
