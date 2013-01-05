@@ -110,7 +110,7 @@
   position: absolute;
   border-radius: 2px;
   -webkit-transition: left 15s linear;
-  transition: left 15s linear;
+  -moz-transition: left 15s linear;
 }
 
 .beep.active {
