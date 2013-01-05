@@ -78,9 +78,9 @@ function handleQueueItem (message, cb) {
   // beepElement.style.width = (message.duration / 10) + 'px';
   // beepElement.style.marginLeft = (message.duration / -10) + 'px';
   // messageContainer.appendChild(beepElement);
-  setTimeout(function() {
-    beepElement.classList.add('active')
-  },0);
+  // setTimeout(function() {
+  //   beepElement.classList.add('active')
+  // },0);
 
 
   setTimeout(function () {
