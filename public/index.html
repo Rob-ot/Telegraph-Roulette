@@ -28,6 +28,7 @@
 
   <button class="rockerButton"></button>
   <div class="messageDisplay"></div>
+  <span id='status'></span>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -36,6 +37,7 @@
   </script>
   <script>
 
+
     var isConnected = false
     var messageStartTime = null
     var messageQueue = async.queue(handleQueueItem, 1)
@@ -43,7 +45,15 @@
     var rockerButton = document.querySelector(".rockerButton")
     var messageDisplay = document.querySelector(".messageDisplay")
 
-    var socket = io.connect("http://localhost")
+    var socket = io.connect("")
+
+    socket.on('waiting', function() {
+      document.getElementById('status').innerHTML = 'waiting'
+    })
+
+    socket.on('matched', function() {
+      document.getElementById('status').innerHTML = 'matched'
+    })
 
     socket.on("message", function (message) {
       console.log("Received", message)
