@@ -13,18 +13,63 @@
     .rockerButton:active {
       background: red;
     }
-
-
-
-
-
   </style>
 </head>
 <body>
 
   <button class="rockerButton"></button>
 
+
+  <script src="/socket.io/socket.io.js"></script>
   <script>
+
+    var isConnected = false
+    var messageStartTime = null
+
+    var socket = io.connect('http://localhost')
+
+    socket.on('message', function (data) {
+      console.log(data)
+    })
+
+    socket.on("connect", function () {
+      console.log("Socket Connected!")
+      isConnected = true
+    })
+
+    var rockerButton = document.querySelector(".rockerButton")
+
+    function startMessage (e) {
+      messageStartTime = Date.now()
+
+      window.addEventListener("mouseup", endMessage, false)
+      window.addEventListener("touchend", endMessage, false)
+    }
+
+    function endMessage () {
+
+      var messageDuration = Date.now() - messageStartTime
+
+
+      var message = {
+        duration: messageDuration
+      }
+      socket.emit("message", message)
+      console.log("Sending", message)
+
+      window.removeEventListener("mouseup", endMessage, false)
+      window.removeEventListener("touchend", endMessage, false)
+    }
+
+
+    rockerButton.addEventListener("mousedown", startMessage, false)
+    rockerButton.addEventListener("touchstart", startMessage, false)
+
+
+
+
+
+
 
 
   </script>
