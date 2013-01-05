@@ -19,6 +19,8 @@ app.get('/', function (req, res) {
 io.sockets.on('connection', function (socket) {
   reloadUser(socket)
   socket.on('disconnect', function() {
+    console.log('total users: ', ids)
+    
     var partner = ids[socket.id]
     if (!partner) {
       console.log('no partner, just going away')
@@ -28,6 +30,10 @@ io.sockets.on('connection', function (socket) {
     partner.emit('abandoned')
     reloadUser(partner)
     delete ids[socket.id]
+  })
+  socket.on('setName', function(name) {
+    socket.set('name', name)
+    console.log('set name to ' + name)
   })
 })
 
@@ -52,5 +58,8 @@ function connectUsers(user1, user2) {
   user1.on('message', function(data) {
     console.log('sending data from user1 to user2', data)
     user2.emit('message', data)
+    user1.get('name', function(err, name) {
+      user2.emit('fromName', name)
+    })
   })
 }
