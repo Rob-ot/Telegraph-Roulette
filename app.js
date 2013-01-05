@@ -1,9 +1,12 @@
+'use strict';
+
 var express = require('express')
 var app = express()
 var server = require('http').createServer(app)
 var io = require('socket.io').listen(server)
 
 var waitingUser
+var ids = {}
 
 server.listen(3005)
 
@@ -14,26 +17,17 @@ app.get('/', function (req, res) {
 })
 
 io.sockets.on('connection', function (socket) {
-
   reloadUser(socket)
-
   socket.on('disconnect', function() {
-    console.log(socket + ' has disconnected.')
-    socket.get('partner', function(err, partner) {
-      if (err) {
-        console.log('ERROR!!!!', err)
-      }
-      else {
-        console.log("ABOUT TO ABANDON")
-      }
-      partner.emit('abandoned')
-    })
-  })
-
-  socket.on('abandoned', function() {
-    socket.set('partner', undefined)
-    console.log('socket has been abandoned. lets reload the user')
-    reloadUser(socket)
+    var partner = ids[socket.id]
+    if (!partner) {
+      console.log('no partner, just going away')
+      return
+    }
+    console.log('sending abandoned to ', partner.id)
+    partner.emit('abandoned')
+    reloadUser(partner)
+    delete ids[socket.id]
   })
 })
 
@@ -54,7 +48,7 @@ function reloadUser(socket) {
 
 function connectUsers(user1, user2) {
   user1.emit('matched')
-  user1.set('partner', user2)
+  ids[user1.id] = user2
   user1.on('message', function(data) {
     console.log('sending data from user1 to user2', data)
     user2.emit('message', data)
