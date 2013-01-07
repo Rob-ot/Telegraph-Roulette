@@ -5,6 +5,8 @@
   height: 10%;
   margin: 24px;
   position: relative;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 
 #telegraph-base {
@@ -87,6 +89,10 @@
   transform: rotate(-3deg);
 }
 
+#messageContainer {
+  width: 100%;
+}
+
 .messageDisplay {
   height: 200px;
   width: 200px;
@@ -95,4 +101,18 @@
 .messageDisplay.messaging {
   background: green;
   border: 1px solid black;
+}
+
+.beep {
+  height: 5px;
+  background-color: red;
+  right: 0;
+  position: absolute;
+  border-radius: 2px;
+  -webkit-transition: left 15s linear;
+  -moz-transition: left 15s linear;
+}
+
+.beep.active {
+  left:100%;
 }
